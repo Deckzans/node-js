@@ -1,4 +1,8 @@
-const TABLA = 'clientes';
+// const db = require('../../DB/mysql');
+
+const TABLA = 'usuarios';
+
+
 
 module.exports = function (dbinyectada) {
 
@@ -26,6 +30,7 @@ module.exports = function (dbinyectada) {
     }
     
     return{ 
+
         todos,
         uno,
         agregar,

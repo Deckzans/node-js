@@ -1,4 +1,7 @@
+//importaciones de apps
 const mysql = require('mysql');
+
+//importaciones locales
 const config = require('../configure');
 
 const dbconfig = { 
@@ -10,6 +13,9 @@ const dbconfig = {
 
 let conexion;
 
+
+//Processos en sql 
+
 function conexionMysql (){ 
     conexion = mysql.createConnection(dbconfig);
 
@@ -18,7 +24,7 @@ conexion.connect((err) => {
         console.log('[db err]',err);
         setTimeout(conexionMysql,2000)
     }else{ 
-        console.log('DB CONECTADA')
+        console.log('La conexion MYSQWL Fue exitosa')
     }
 });
 
@@ -38,11 +44,8 @@ conexionMysql();
 function todos(tabla){ 
     return new Promise ( (resolve,reject) => { 
         conexion.query(`SELECT * FROM ${tabla}`,(error, result) => { 
-            if(error){ 
-                setTimeout(function(){ alert('Verificando errores... ')},2000)
-                return reject(error)
-            }
-            resolve(result);
+            console.log(result)
+            return error ? reject(error) :resolve(result)
         })
 
     } )
@@ -50,14 +53,33 @@ function todos(tabla){
 
 function uno(tabla,id){ 
 
+    return new Promise ( (resolve,reject) => { 
+        conexion.query(`SELECT * FROM ${tabla} WHERE id=${id}`,(error, result) => { 
+          return error ? reject(error) : resolve(result)
+        })
+
+    } )
 }
 
 function agregar(tabla,data){
+    return new Promise ( (resolve,reject) => { 
+        conexion.query(`INSERT INTO ${tabla} SET ? ON DUPLICATE KEY UPDATE ?`, [data,data] , (error, result) => { 
+          return error ? reject(error) : resolve(result)
+        })
 
+    } )
 }
 
-function eliminar(tabla,id){
 
+
+
+function eliminar(tabla,data){
+    return new Promise ( (resolve,reject) => { 
+        conexion.query(`DELETE FROM ${tabla} WHERE id = ?`, data.id , (error, result) => { 
+          return error ? reject(error) : resolve(result)
+        })
+
+    } )
 }
 
 module.exports={ 

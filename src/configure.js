@@ -1,3 +1,4 @@
+//importacion de entorno de variable
 require('dotenv').config();
 
 module.exports = { 
